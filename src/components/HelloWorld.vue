@@ -6,16 +6,61 @@
     <div class="mt-16">
       <div class="text-gray-700 text-lg w-7/12 mx-auto font-light">Try it out:</div>
       <button class="action-btn">Camera</button>
-      <button class="action-btn">Gallery</button>
+      <button v-on:click="triggerFileUpload" class="action-btn">Gallery</button>
+      <input
+        type="file"
+        ref="fileInput"
+        accept="image/*"
+        v-on:change="fileChange($event.target.files)"
+        class="hidden"
+      />
     </div>
   </div>
 </template>
 
 <script>
+const STATUS_NONE = 0,
+  STATUS_UPLOADING = 1,
+  STATUS_SUCCESS = 2,
+  STATUS_ERROR = 3,
+  STATUS_EMPTY_FILE = 4;
+
 export default {
   name: "HelloWorld",
-  props: {
-    msg: String
+  data() {
+    return {
+      uploadPicture: undefined,
+      uploadStatus: STATUS_NONE
+    };
+  },
+  methods: {
+    triggerFileUpload: function() {
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.click();
+      } else {
+        console.error("fileInput not available");
+      }
+    },
+    fileChange: function(fileArray) {
+      const file = fileArray[0];
+      console.log("file =>", file);
+      if (!file) {
+        console.warn("Empty File");
+        this.uploadStatus = STATUS_EMPTY_FILE;
+        return;
+      }
+      this.fileUpload(file);
+    },
+    fileUpload: function(formData) {
+      this.uploadStatus = STATUS_UPLOADING;
+      try {
+        this.uploadPicture = formData;
+        this.uploadStatus = STATUS_SUCCESS;
+      } catch (error) {
+        console.error(error);
+        this.uploadStatus = STATUS_ERROR;
+      }
+    }
   }
 };
 </script>
