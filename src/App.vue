@@ -6,13 +6,13 @@
       rel="stylesheet"
     />
     <Navbar />
-    <HelloWorld msg="Welcome to Your Vue.js App" class="flex-1" />
+    <Uploader class="flex-1" />
     <Footer />
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Uploader from "./components/Uploader.vue";
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import "./assets/css/tailwind.css";
@@ -21,8 +21,13 @@ export default {
   name: "app",
   components: {
     Navbar,
-    HelloWorld,
+    Uploader,
     Footer
+  },
+  data() {
+    return {
+      imageLoaded: false
+    };
   }
 };
 </script>

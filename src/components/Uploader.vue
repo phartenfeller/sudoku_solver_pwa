@@ -26,7 +26,7 @@ const STATUS_NONE = 0,
   STATUS_EMPTY_FILE = 4;
 
 export default {
-  name: "HelloWorld",
+  name: "Uploader",
   data() {
     return {
       uploadPicture: undefined,
