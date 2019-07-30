@@ -29,7 +29,6 @@ export default {
   name: "Uploader",
   data() {
     return {
-      uploadPicture: undefined,
       uploadStatus: STATUS_NONE
     };
   },
@@ -54,8 +53,8 @@ export default {
     fileUpload: function(formData) {
       this.uploadStatus = STATUS_UPLOADING;
       try {
-        this.uploadPicture = formData;
         this.uploadStatus = STATUS_SUCCESS;
+        this.$emit("uploadSuccess", formData);
       } catch (error) {
         console.error(error);
         this.uploadStatus = STATUS_ERROR;
