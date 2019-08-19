@@ -6,7 +6,16 @@
     <div>width: {{width}} height: {{height}}</div>
     <canvas ref="imageCanvas" class="max-h-screen max-w-full" />
     <h2>Fields</h2>
-    <canvas ref="canv_0_0" />
+    <div class="w-full">
+      <div v-for="i in 9" :key="i" class="block">
+        <canvas
+          class="inline-block w-1/12 border border-pink-300 hover:border-pink-600"
+          v-for="j in 9"
+          :ref="`tile_canvas_r${i}`"
+          :key="j"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -68,29 +77,47 @@ export default {
 
       imageCanvas.getContext("2d").drawImage(imageDisplay, 0, 0, w, h);
 
-      const fieldW = (w / 9).toFixed(0);
-      const fieldH = (h / 9).toFixed(0);
-      const borderW = (fieldW / 5).toFixed(0);
-      const borderH = (fieldH / 5).toFixed(0);
+      const fieldW = parseInt(w / 9);
+      const fieldH = parseInt(h / 9);
+      const borderW = parseInt(fieldW / 5);
+      const borderH = parseInt(fieldH / 5);
+
+      const windowWidth = window.innerWidth;
+      const dpw = parseInt(windowWidth / 9) - 1;
 
       console.log(`${fieldW} x ${fieldH}`);
 
-      canv_0_0.width = fieldW;
-      canv_0_0.height = fieldH;
+      let currentCanvas;
+      let ref;
 
-      canv_0_0
-        .getContext("2d")
-        .drawImage(
-          imageCanvas,
-          borderW,
-          borderH,
-          fieldW - borderW,
-          fieldH - borderH,
-          0,
-          0,
-          fieldW - borderW,
-          fieldH - borderH
-        );
+      for (let i = 1; i <= 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          ref = `tile_canvas_r${i}`;
+          console.log("ref =>", ref);
+          currentCanvas = this.$refs[ref][j];
+
+          if (currentCanvas) {
+            currentCanvas.width = fieldW;
+            currentCanvas.height = fieldW;
+
+            currentCanvas
+              .getContext("2d")
+              .drawImage(
+                imageCanvas,
+                fieldW * j + borderW,
+                fieldH * (i - 1) + borderH,
+                fieldW - borderW,
+                fieldH - borderH,
+                0,
+                0,
+                fieldW,
+                fieldW
+              );
+          } else {
+            console.log("not found");
+          }
+        }
+      }
     }
   }
 };
